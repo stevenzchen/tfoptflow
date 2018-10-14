@@ -14,7 +14,7 @@ sys.path.append('../../utils')
 from stream import VideoInputStream
 
 
-CKPT_PATH = '../../../pwcnet/pwcnet-lg-6-2-multisteps-chairsthingsmix/pwcnet.ckpt-595000'
+CKPT_PATH = '../../../pwcnet/pwcnet_lg/pwcnet.ckpt-595000'
 
 def main():
     # parse input and output file paths
@@ -25,7 +25,7 @@ def main():
 
     video = VideoInputStream(args.input, start_frame=0)
     out_video = cv2.VideoWriter(args.output,
-                                cv2.VideoWriter_fourcc(*'DIVX'),
+                                cv2.VideoWriter_fourcc(*'H264'),
                                 video.rate, (2 * video.width, video.height))
 
     # set NN test options
@@ -58,7 +58,7 @@ def main():
         pred = pred_labels[0]
 
         # show results
-        flow_im = flow_to_img(pred)
+        flow_im = flow_to_img(pred, flow_mag_max=100)
 
         vis_image = np.concatenate((im, flow_im), axis=1)
         out_video.write(vis_image)
